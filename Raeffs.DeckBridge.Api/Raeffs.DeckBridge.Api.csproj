@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Raeffs.DeckBridge.Deckstats\Raeffs.DeckBridge.Deckstats.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.DelverLens\Raeffs.DeckBridge.DelverLens.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.Scryfall\Raeffs.DeckBridge.Scryfall.csproj" />
+  </ItemGroup>
+
+</Project>
