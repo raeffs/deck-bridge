@@ -16,7 +16,7 @@ public record Card
 
     public string Name { get; init; } = string.Empty;
 
-    public string Set { get; init; } = string.Empty;
+    public string SetCode { get; init; } = string.Empty;
 
     public string CollectorNumber { get; init; } = string.Empty;
 }

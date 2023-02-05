@@ -8,17 +8,19 @@ namespace Raeffs.DeckBridge.Api.Controllers;
 public class TransformationController : ControllerBase
 {
     private readonly IDeckReader<Card> _reader;
-    private readonly IDeckWriter _writer;
+    private readonly DeckWriterSelector _writerSelector;
 
-    public TransformationController(IDeckReader<Card> reader, IDeckWriter writer)
+    public TransformationController(IDeckReader<Card> reader, DeckWriterSelector writerSelector)
     {
         _reader = reader;
-        _writer = writer;
+        _writerSelector = writerSelector;
     }
 
     [HttpPost]
-    public async Task PostAsync([FromForm] IFormFile file, CancellationToken cancellationToken)
+    public async Task PostAsync([FromForm] IFormFile file, [FromQuery] DeckWriterProvider? outputProvider, CancellationToken cancellationToken)
     {
+        var writer = _writerSelector.SelectWriter(outputProvider);
+
         var path = Path.GetTempFileName();
 
         using (var stream = System.IO.File.Create(path))
@@ -27,6 +29,6 @@ public class TransformationController : ControllerBase
         }
 
         Response.ContentType = "text/csv";
-        await _writer.WriteDeckAsync(Response.Body, _reader.ReadDeckAsync(path, cancellationToken), cancellationToken);
+        await writer.WriteDeckAsync(Response.Body, _reader.ReadDeckAsync(path, cancellationToken), cancellationToken);
     }
 }

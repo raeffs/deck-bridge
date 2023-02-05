@@ -13,10 +13,12 @@ internal class DeckstatsDeckWriter : IDeckWriter
 
     };
 
+    public DeckWriterProvider ProviderName => DeckWriterProvider.Deckstats;
+
     public async Task WriteDeckAsync(Stream stream, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
     {
-        var writer = new StreamWriter(stream);
-        var csv = new CsvWriter(writer, _configuration);
+        await using var writer = new StreamWriter(stream);
+        await using var csv = new CsvWriter(writer, _configuration);
 
         csv.WriteHeader<DeckstatsCardData>();
         await csv.NextRecordAsync().ConfigureAwait(false);
@@ -28,12 +30,12 @@ internal class DeckstatsDeckWriter : IDeckWriter
                 Name = card.Name,
                 Quantity = card.Quantity,
                 IsFoil = card.IsFoil,
-                Set = card.Set,
+                SetCode = card.SetCode,
                 CollectorNumber = card.CollectorNumber
             });
             await csv.NextRecordAsync().ConfigureAwait(false);
         }
 
-        await csv.FlushAsync();
+        await csv.FlushAsync().ConfigureAwait(false);
     }
 }

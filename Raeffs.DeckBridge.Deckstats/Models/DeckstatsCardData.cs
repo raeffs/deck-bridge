@@ -14,7 +14,7 @@ internal record DeckstatsCardData
     public bool IsFoil { get; init; }
 
     [Name("set_name")]
-    public string Set { get; init; } = string.Empty;
+    public string SetCode { get; init; } = string.Empty;
 
     [Name("collector_number")]
     public string CollectorNumber { get; init; } = string.Empty;
