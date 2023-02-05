@@ -12,6 +12,8 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
     private const int DefaultIsFoilIndex = 2;
     private const string QuantityColumnName = "quantity";
     private const int DefaultQuantityIndex = 4;
+    private const string CreationColumnName = "creation";
+    private const int DefaultCreationIndex = 6;
 
     public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -25,6 +27,7 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
         var cardIdIndex = schema.GetColumnIndex(CardIdColumnName, DefaultCardIdIndex);
         var isFoilIndex = schema.GetColumnIndex(IsFoilColumnName, DefaultIsFoilIndex);
         var quantityIndex = schema.GetColumnIndex(QuantityColumnName, DefaultQuantityIndex);
+        var creationIndex = schema.GetColumnIndex(CreationColumnName, DefaultCreationIndex);
 
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
@@ -32,7 +35,8 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
             {
                 InternalId = reader.GetInt32(cardIdIndex),
                 IsFoil = reader.GetBoolean(isFoilIndex),
-                Quantity = reader.GetInt32(quantityIndex)
+                Quantity = reader.GetInt32(quantityIndex),
+                Added = DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(creationIndex)).UtcDateTime
             };
         }
     }

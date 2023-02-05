@@ -1,7 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using Raeffs.DeckBridge.Common;
-using Raeffs.DeckBridge.Deckstats.Models;
 using System.Globalization;
 
 namespace Raeffs.DeckBridge.Deckstats;
@@ -20,19 +19,14 @@ internal class DeckstatsDeckWriter : IDeckWriter
         await using var writer = new StreamWriter(stream);
         await using var csv = new CsvWriter(writer, _configuration);
 
-        csv.WriteHeader<DeckstatsCardData>();
+        csv.Context.RegisterClassMap<DeckstatsCardMap>();
+
+        csv.WriteHeader<Card>();
         await csv.NextRecordAsync().ConfigureAwait(false);
 
         await foreach (var card in cards.WithCancellation(cancellationToken).ConfigureAwait(false))
         {
-            csv.WriteRecord(new DeckstatsCardData
-            {
-                Name = card.Name,
-                Quantity = card.Quantity,
-                IsFoil = card.IsFoil,
-                SetCode = card.SetCode,
-                CollectorNumber = card.CollectorNumber
-            });
+            csv.WriteRecord(card);
             await csv.NextRecordAsync().ConfigureAwait(false);
         }
 

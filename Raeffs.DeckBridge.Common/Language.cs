@@ -3,5 +3,16 @@
 public enum Language
 {
     Unknown,
-    English
+    English,
+    German,
+    French,
+    Spanish,
+    Italian,
+    SimplifiedChinese,
+    TraditionalChinese,
+    Japanese,
+    Portuguese,
+    Korean,
+    Russian,
+    Phyrexian
 }

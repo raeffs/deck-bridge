@@ -10,7 +10,7 @@ public record Card
 
     public Condition Condition { get; init; }
 
-    public DateTime Added { get; init; }
+    public DateTime? Added { get; init; }
 
     public string Comment { get; init; } = string.Empty;
 
@@ -19,4 +19,8 @@ public record Card
     public string SetCode { get; init; } = string.Empty;
 
     public string CollectorNumber { get; init; } = string.Empty;
+
+    public bool IsSigned { get; init; }
+
+    public bool IsPinned { get; init; }
 }

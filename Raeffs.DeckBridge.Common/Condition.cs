@@ -2,5 +2,12 @@
 
 public enum Condition
 {
-    Unknwon
+    Unknown,
+    Mint,
+    NearMint,
+    Excellent,
+    Good,
+    LightPlayed,
+    Played,
+    Poor
 }
