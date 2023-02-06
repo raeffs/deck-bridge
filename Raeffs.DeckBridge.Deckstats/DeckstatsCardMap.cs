@@ -76,8 +76,8 @@ internal class DeckstatsCardMap : ClassMap<Card>
         private static string GetCondition(Condition value) => value switch
         {
             Condition.Mint or Condition.NearMint => "NM",
-            Condition.Excellent or Condition.Good => "LP",
-            Condition.LightPlayed => "MP",
+            Condition.Excellent => "LP",
+            Condition.Good or Condition.LightPlayed => "MP",
             Condition.Played => "HP",
             Condition.Poor => "DM",
             _ => string.Empty
