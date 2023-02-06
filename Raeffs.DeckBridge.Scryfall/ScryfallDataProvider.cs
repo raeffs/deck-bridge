@@ -3,6 +3,7 @@ using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Scryfall.Models;
 using Raeffs.DeckBridge.Scryfall.Options;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Raeffs.DeckBridge.Scryfall;
 
@@ -10,7 +11,11 @@ internal class ScryfallDataProvider : IAppInitializer, IScryfallDataProvider
 {
     private readonly JsonSerializerOptions _serializerOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        Converters =
+        {
+            new JsonStringEnumConverter()
+        }
     };
 
     private readonly IOptions<ScryfallOptions> _options;

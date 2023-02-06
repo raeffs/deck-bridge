@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Raeffs.DeckBridge.Common;
+using System.Text.Json.Serialization;
 
 namespace Raeffs.DeckBridge.Scryfall.Models;
 
@@ -12,4 +13,6 @@ internal record ScryfallCardData
 
     [JsonPropertyName("collector_number")]
     public string CollectorNumber { get; init; } = string.Empty;
+
+    public Rarity Rarity { get; init; }
 }

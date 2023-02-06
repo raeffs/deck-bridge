@@ -6,14 +6,13 @@ namespace Raeffs.DeckBridge.DelverLens;
 
 internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
 {
-    private const string CardIdColumnName = "card";
-    private const int DefaultCardIdIndex = 1;
-    private const string IsFoilColumnName = "foil";
-    private const int DefaultIsFoilIndex = 2;
-    private const string QuantityColumnName = "quantity";
-    private const int DefaultQuantityIndex = 4;
-    private const string CreationColumnName = "creation";
-    private const int DefaultCreationIndex = 6;
+    private static readonly ColumnDefinition CardColumn = new("card", 1);
+    private static readonly ColumnDefinition FoilColumn = new("foil", 2);
+    private static readonly ColumnDefinition QuantityColumn = new("quantity", 4);
+    private static readonly ColumnDefinition CreationColumn = new("creation", 6);
+    private static readonly ColumnDefinition NoteColumn = new("note", 8);
+    private static readonly ColumnDefinition ConditionColumn = new("condition", 9);
+    private static readonly ColumnDefinition LanguageColumn = new("language", 10);
 
     public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -24,20 +23,51 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
         using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
 
         var schema = await reader.GetColumnSchemaAsync(cancellationToken).ConfigureAwait(false);
-        var cardIdIndex = schema.GetColumnIndex(CardIdColumnName, DefaultCardIdIndex);
-        var isFoilIndex = schema.GetColumnIndex(IsFoilColumnName, DefaultIsFoilIndex);
-        var quantityIndex = schema.GetColumnIndex(QuantityColumnName, DefaultQuantityIndex);
-        var creationIndex = schema.GetColumnIndex(CreationColumnName, DefaultCreationIndex);
+        var cardIndex = schema.GetColumnIndex(CardColumn);
+        var foilIndex = schema.GetColumnIndex(FoilColumn);
+        var quantityIndex = schema.GetColumnIndex(QuantityColumn);
+        var creationIndex = schema.GetColumnIndex(CreationColumn);
+        var noteIndex = schema.GetColumnIndex(NoteColumn);
+        var conditionIndex = schema.GetColumnIndex(ConditionColumn);
+        var languageIndex = schema.GetColumnIndex(LanguageColumn);
 
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
             yield return new()
             {
-                InternalId = reader.GetInt32(cardIdIndex),
-                IsFoil = reader.GetBoolean(isFoilIndex),
+                InternalId = reader.GetInt32(cardIndex),
+                IsFoil = reader.GetBoolean(foilIndex),
                 Quantity = reader.GetInt32(quantityIndex),
-                Added = DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(creationIndex)).UtcDateTime
+                Added = DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(creationIndex)).UtcDateTime,
+                Comment = reader.GetString(noteIndex),
+                Condition = GetCondition(reader.GetString(conditionIndex)),
+                Language = GetLanguage(reader.GetString(languageIndex))
             };
         }
     }
+
+    private static Condition GetCondition(string value) => value switch
+    {
+        "Near Mint" => Condition.NearMint,
+        "Slightly Played" => Condition.Excellent,
+        "Moderately Played" => Condition.Good,
+        "Heavily Played" => Condition.Played,
+        _ => Condition.Unknown
+    };
+
+    private static Language GetLanguage(string value) => value switch
+    {
+        "English" => Language.English,
+        "German" => Language.German,
+        "French" => Language.French,
+        "Japanese" => Language.Japanese,
+        "Spanish" => Language.Spanish,
+        "Chinese Traditional" => Language.TraditionalChinese,
+        "Portuguese" => Language.Portuguese,
+        "Italian" => Language.Italian,
+        "Chinese Simplified" => Language.SimplifiedChinese,
+        "Russian" => Language.Russian,
+        "Korean" => Language.Korean,
+        _ => Language.Unknown
+    };
 }

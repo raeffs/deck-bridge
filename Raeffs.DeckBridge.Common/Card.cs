@@ -2,13 +2,17 @@
 
 public record Card
 {
-    public bool IsFoil { get; init; }
-
     public int Quantity { get; init; }
 
     public Language Language { get; init; }
 
     public Condition Condition { get; init; }
+
+    public bool IsFoil { get; init; }
+
+    public bool IsSigned { get; init; }
+
+    public bool IsPinned { get; init; }
 
     public DateTime? Added { get; init; }
 
@@ -20,7 +24,5 @@ public record Card
 
     public string CollectorNumber { get; init; } = string.Empty;
 
-    public bool IsSigned { get; init; }
-
-    public bool IsPinned { get; init; }
+    public Rarity Rarity { get; init; }
 }

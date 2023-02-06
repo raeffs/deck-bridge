@@ -35,7 +35,8 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card, IScryfal
             {
                 Name = data.Name,
                 SetCode = data.Set,
-                CollectorNumber = data.CollectorNumber
+                CollectorNumber = data.CollectorNumber,
+                Rarity = data.Rarity
             };
         }
     }
