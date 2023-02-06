@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Raeffs.DeckBridge.Deckstats\Raeffs.DeckBridge.Deckstats.csproj" />
-    <ProjectReference Include="..\Raeffs.DeckBridge.DelverLens\Raeffs.DeckBridge.DelverLens.csproj" />
-    <ProjectReference Include="..\Raeffs.DeckBridge.Generic\Raeffs.DeckBridge.Generic.csproj" />
-    <ProjectReference Include="..\Raeffs.DeckBridge.MagicOnline\Raeffs.DeckBridge.MagicOnline.csproj" />
-    <ProjectReference Include="..\Raeffs.DeckBridge.Moxfield\Raeffs.DeckBridge.Moxfield.csproj" />
-    <ProjectReference Include="..\Raeffs.DeckBridge.Scryfall\Raeffs.DeckBridge.Scryfall.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.Common\Raeffs.DeckBridge.Common.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.Engine\Raeffs.DeckBridge.Engine.csproj" />
   </ItemGroup>
 
 </Project>

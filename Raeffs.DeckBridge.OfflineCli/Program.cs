@@ -1,14 +1,10 @@
 ﻿using CommandLine;
 using CommandLine.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Raeffs.DeckBridge.Common;
-using Raeffs.DeckBridge.Deckstats;
-using Raeffs.DeckBridge.DelverLens;
-using Raeffs.DeckBridge.Generic;
+using Raeffs.DeckBridge.Engine;
 using Raeffs.DeckBridge.OfflineCli;
-using Raeffs.DeckBridge.Scryfall;
 
 var parser = new Parser();
 var result = parser.ParseArguments<Options>(args);
@@ -53,31 +49,20 @@ try
 
     var builder = Host.CreateApplicationBuilder();
 
-    var config = new ConfigurationBuilder()
-        .AddInMemoryCollection(new Dictionary<string, string?>
+    builder.Services
+        .AddDeckBridgeEngine(new EngineOptions
         {
-            { "Scryfall:BulkDataFile", options.ScryfallBulkDataFile },
-            { "DelverLens:DataFile", options.DelverLensDataFile }
-        })
-        .Build();
-
-    builder.Services
-        .AddGeneric()
-        .AddDelverLens(config.GetSection("DelverLens"))
-        .AddScryfall(config.GetSection("Scryfall"))
-        .AddDeckstats();
-
-    builder.Services
-        .AddTransient<DeckWriterSelector>();
+            ScryfallBulkDataFile = options.ScryfallBulkDataFile,
+            DelverLensDataFile = options.DelverLensDataFile
+        });
 
     var host = builder.Build();
 
-    var initializer = host.Services.GetRequiredService<IAppInitializer>();
-    await initializer.InitializeAsync();
+    await host.InitializeEngineAsync().ConfigureAwait(false);
 
     var reader = host.Services.GetRequiredService<IDeckReader<Card>>();
-    var writerSelector = host.Services.GetRequiredService<DeckWriterSelector>();
-    var writer = writerSelector.SelectWriter(options.OutputFormat);
+    var writers = host.Services.GetRequiredService<IDeckWriterCollection>();
+    var writer = writers.Find(options.OutputFormat);
 
     if (outputToFile)
     {

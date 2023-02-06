@@ -1,30 +1,16 @@
-using Raeffs.DeckBridge.Common;
-using Raeffs.DeckBridge.Deckstats;
-using Raeffs.DeckBridge.DelverLens;
-using Raeffs.DeckBridge.Generic;
-using Raeffs.DeckBridge.Scryfall;
+using Raeffs.DeckBridge.Engine;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddGeneric()
-    .AddDelverLens(builder.Configuration.GetSection("DelverLens"))
-    .AddScryfall(builder.Configuration.GetSection("Scryfall"))
-    .AddDeckstats();
-
-builder.Services
-    .AddTransient<DeckWriterSelector>();
+    .AddDeckBridgeEngine(builder.Configuration);
 
 builder.Services
     .AddControllers();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var initializer = scope.ServiceProvider.GetRequiredService<IAppInitializer>();
-    await initializer.InitializeAsync();
-}
+await app.InitializeEngineAsync().ConfigureAwait(false);
 
 app.MapControllers();
 

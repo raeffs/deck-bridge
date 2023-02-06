@@ -19,9 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Generic",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.OfflineCli", "Raeffs.DeckBridge.OfflineCli\Raeffs.DeckBridge.OfflineCli.csproj", "{32559A70-8737-44AD-8A3B-4CB8CE36453E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Moxfield", "Raeffs.DeckBridge.Moxfield\Raeffs.DeckBridge.Moxfield.csproj", "{A14A827A-BA46-42A7-92BE-B3F6865AF2C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Moxfield", "Raeffs.DeckBridge.Moxfield\Raeffs.DeckBridge.Moxfield.csproj", "{9152E4FC-2199-471E-B913-6D48A060D35A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.MagicOnline", "Raeffs.DeckBridge.MagicOnline\Raeffs.DeckBridge.MagicOnline.csproj", "{4984CB07-0237-427E-B2C8-6A3D1BE7A5DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Engine", "Raeffs.DeckBridge.Engine\Raeffs.DeckBridge.Engine.csproj", "{B7AD902A-5701-4BCB-86BB-2247E4E17E51}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Csv", "Raeffs.DeckBridge.Csv\Raeffs.DeckBridge.Csv.csproj", "{CD739352-270B-473E-9700-9051D82947EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.MagicOnline", "Raeffs.DeckBridge.MagicOnline\Raeffs.DeckBridge.MagicOnline.csproj", "{DEF91E8D-6B43-418F-8751-129E6BA8975D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,14 +65,22 @@ Global
 		{32559A70-8737-44AD-8A3B-4CB8CE36453E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32559A70-8737-44AD-8A3B-4CB8CE36453E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32559A70-8737-44AD-8A3B-4CB8CE36453E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A14A827A-BA46-42A7-92BE-B3F6865AF2C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A14A827A-BA46-42A7-92BE-B3F6865AF2C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A14A827A-BA46-42A7-92BE-B3F6865AF2C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A14A827A-BA46-42A7-92BE-B3F6865AF2C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4984CB07-0237-427E-B2C8-6A3D1BE7A5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4984CB07-0237-427E-B2C8-6A3D1BE7A5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4984CB07-0237-427E-B2C8-6A3D1BE7A5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4984CB07-0237-427E-B2C8-6A3D1BE7A5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9152E4FC-2199-471E-B913-6D48A060D35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9152E4FC-2199-471E-B913-6D48A060D35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9152E4FC-2199-471E-B913-6D48A060D35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9152E4FC-2199-471E-B913-6D48A060D35A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7AD902A-5701-4BCB-86BB-2247E4E17E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7AD902A-5701-4BCB-86BB-2247E4E17E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7AD902A-5701-4BCB-86BB-2247E4E17E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7AD902A-5701-4BCB-86BB-2247E4E17E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD739352-270B-473E-9700-9051D82947EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD739352-270B-473E-9700-9051D82947EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD739352-270B-473E-9700-9051D82947EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD739352-270B-473E-9700-9051D82947EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
