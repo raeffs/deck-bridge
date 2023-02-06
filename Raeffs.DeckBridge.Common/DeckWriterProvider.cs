@@ -3,5 +3,6 @@
 public enum DeckWriterProvider
 {
     Generic,
-    Deckstats
+    Deckstats,
+    Moxfield,
 }
