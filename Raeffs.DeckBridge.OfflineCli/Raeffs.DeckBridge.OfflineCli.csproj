@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Raeffs.DeckBridge.Deckstats\Raeffs.DeckBridge.Deckstats.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.DelverLens\Raeffs.DeckBridge.DelverLens.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.Generic\Raeffs.DeckBridge.Generic.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.MagicOnline\Raeffs.DeckBridge.MagicOnline.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.Moxfield\Raeffs.DeckBridge.Moxfield.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.Scryfall\Raeffs.DeckBridge.Scryfall.csproj" />
   </ItemGroup>
