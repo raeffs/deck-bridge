@@ -24,4 +24,4 @@ jobs:
           name: offline-cli
           path: |
             dist/**/*
-            !*.pdb
+            !**/*.pdb
