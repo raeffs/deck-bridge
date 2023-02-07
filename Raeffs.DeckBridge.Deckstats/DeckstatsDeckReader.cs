@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using CsvHelper.Configuration;
 using Raeffs.DeckBridge.Common;
 using System.Globalization;
@@ -12,7 +12,7 @@ internal class DeckstatsDeckReader : IDeckReader<Card>
 
     public DeckReaderProvider ProviderName => DeckReaderProvider.Deckstats;
 
-    public IAsyncEnumerable<Card> ReadDeckAsync(string filename, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<Card> ReadDeckAsync(string filename, Deck deck, CancellationToken cancellationToken = default)
     {
         return ReadDeckAsync(File.OpenRead(filename), cancellationToken);
     }

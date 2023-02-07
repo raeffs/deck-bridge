@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.DelverLens.Options;
 using System.Data.SQLite;
@@ -19,12 +19,12 @@ internal class ScryfallReferenceEnricher : IDeckReader<DelverLensCard>
 
     public DeckReaderProvider ProviderName => _underlyingReader.ProviderName;
 
-    public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var connection = new SQLiteConnection($"URI=file:{_options.Value.DataFile};mode=ReadOnly");
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        await foreach (var card in _underlyingReader.ReadDeckAsync(filename, cancellationToken).ConfigureAwait(false))
+        await foreach (var card in _underlyingReader.ReadDeckAsync(filename, deck, cancellationToken).ConfigureAwait(false))
         {
             using var command = new SQLiteCommand("SELECT scryfall_id FROM cards WHERE _id=@Id", connection);
             command.Parameters.AddWithValue("@Id", card.InternalId);

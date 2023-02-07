@@ -17,34 +17,35 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card
 
     public DeckReaderProvider ProviderName => _underlyingReader.ProviderName;
 
-    public async IAsyncEnumerable<T> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<T> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        await foreach (var card in _underlyingReader.ReadDeckAsync(filename, cancellationToken).ConfigureAwait(false))
+        await foreach (var card in _underlyingReader.ReadDeckAsync(filename, deck, cancellationToken).ConfigureAwait(false))
         {
-            var additionalData = default(ScryfallCardData?);
+            yield return EnrichCard(card);
+        }
+    }
 
-            if (card is IScryfallCardReference cardWithReference && cardWithReference.ScryfallId != Guid.Empty)
-            {
-                additionalData = _dataProvider.Find(cardWithReference.ScryfallId);
-            }
-            else if (!string.IsNullOrWhiteSpace(card.SetCode) && !string.IsNullOrWhiteSpace(card.CollectorNumber))
-            {
-                additionalData = _dataProvider.Find(card.SetCode, card.CollectorNumber);
-            }
+    private T EnrichCard(T card)
+    {
+        var additionalData = default(ScryfallCardData?);
 
-            if (additionalData is null)
-            {
-                yield return card;
-                continue;
-            }
+        if (card is IScryfallCardReference cardWithReference && cardWithReference.ScryfallId != Guid.Empty)
+        {
+            additionalData = _dataProvider.Find(cardWithReference.ScryfallId);
+        }
+        else if (!string.IsNullOrWhiteSpace(card.SetCode) && !string.IsNullOrWhiteSpace(card.CollectorNumber))
+        {
+            additionalData = _dataProvider.Find(card.SetCode, card.CollectorNumber);
+        }
 
-            yield return card with
+        return additionalData is null
+            ? card
+            : (card with
             {
                 Name = additionalData.Name,
                 SetCode = additionalData.Set,
                 CollectorNumber = additionalData.CollectorNumber,
                 Rarity = additionalData.Rarity
-            };
-        }
+            });
     }
 }

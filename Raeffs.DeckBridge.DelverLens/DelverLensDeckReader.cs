@@ -1,4 +1,4 @@
-﻿using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Common;
 using System.Data.SQLite;
 using System.Runtime.CompilerServices;
 
@@ -16,7 +16,7 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
 
     public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
 
-    public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var connection = new SQLiteConnection($"URI=file:{filename};mode=ReadOnly");
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
