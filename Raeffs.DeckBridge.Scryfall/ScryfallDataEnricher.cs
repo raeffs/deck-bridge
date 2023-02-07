@@ -15,6 +15,8 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card
         _dataProvider = dataProvider;
     }
 
+    public DeckReaderProvider ProviderName => _underlyingReader.ProviderName;
+
     public async IAsyncEnumerable<T> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         await foreach (var card in _underlyingReader.ReadDeckAsync(filename, cancellationToken).ConfigureAwait(false))

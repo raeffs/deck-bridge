@@ -14,7 +14,10 @@ internal record Options
     [Option("force", HelpText = "Overwrite the output file if it already exists.")]
     public bool Force { get; init; }
 
-    [Option('f', "outFormat", Default = DeckWriterProvider.Generic, HelpText = "Specify the output format.")]
+    [Option("from", Default = DeckReaderProvider.DelverLens, HelpText = "Specify the input format.")]
+    public DeckReaderProvider InputFormat { get; init; }
+
+    [Option("to", Default = DeckWriterProvider.Generic, HelpText = "Specify the output format.")]
     public DeckWriterProvider OutputFormat { get; init; }
 
     [Option("delverLensDataFile", Default = "dlens.db")]

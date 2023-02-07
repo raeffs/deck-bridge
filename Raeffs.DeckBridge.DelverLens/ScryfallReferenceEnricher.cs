@@ -17,6 +17,8 @@ internal class ScryfallReferenceEnricher : IDeckReader<DelverLensCard>
         _options = options;
     }
 
+    public DeckReaderProvider ProviderName => _underlyingReader.ProviderName;
+
     public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var connection = new SQLiteConnection($"URI=file:{_options.Value.DataFile};mode=ReadOnly");

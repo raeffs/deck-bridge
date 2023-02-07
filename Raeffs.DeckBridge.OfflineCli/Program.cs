@@ -1,8 +1,7 @@
-﻿using CommandLine;
+using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Engine;
 using Raeffs.DeckBridge.OfflineCli;
 
@@ -60,8 +59,10 @@ try
 
     await host.InitializeEngineAsync().ConfigureAwait(false);
 
-    var reader = host.Services.GetRequiredService<IDeckReader<Card>>();
+    var readers = host.Services.GetRequiredService<IDeckReaderCollection>();
     var writers = host.Services.GetRequiredService<IDeckWriterCollection>();
+
+    var reader = readers.Find(options.InputFormat);
     var writer = writers.Find(options.OutputFormat);
 
     if (outputToFile)

@@ -14,6 +14,8 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
     private static readonly ColumnDefinition ConditionColumn = new("condition", 9);
     private static readonly ColumnDefinition LanguageColumn = new("language", 10);
 
+    public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
+
     public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var connection = new SQLiteConnection($"URI=file:{filename};mode=ReadOnly");

@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
             .AddMagicOnline();
 
         services
+            .AddTransient<IDeckReaderCollection, DeckReaderCollection>()
             .AddTransient<IDeckWriterCollection, DeckWriterCollection>();
 
         return services;
