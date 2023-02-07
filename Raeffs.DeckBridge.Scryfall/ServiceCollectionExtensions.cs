@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Scryfall.Options;
@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddDeckReaderWithScryfallData<TReader, TCard>(this IServiceCollection services)
         where TReader : IDeckReader<TCard>
-        where TCard : Card, IScryfallCardReference
+        where TCard : Card
     {
         services.AddTransient<IDeckReader<Card>>(services => new ScryfallDataEnricher<TCard>(
             services.GetRequiredService<TReader>(),

@@ -1,9 +1,10 @@
-﻿using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Scryfall.Models;
 using System.Runtime.CompilerServices;
 
 namespace Raeffs.DeckBridge.Scryfall;
 
-internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card, IScryfallCardReference
+internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card
 {
     private readonly IDeckReader<T> _underlyingReader;
     private readonly IScryfallDataProvider _dataProvider;
@@ -18,14 +19,18 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card, IScryfal
     {
         await foreach (var card in _underlyingReader.ReadDeckAsync(filename, cancellationToken).ConfigureAwait(false))
         {
-            if (card.ScryfallId == Guid.Empty)
+            var additionalData = default(ScryfallCardData?);
+
+            if (card is IScryfallCardReference cardWithReference && cardWithReference.ScryfallId != Guid.Empty)
             {
-                yield return card;
-                continue;
+                additionalData = _dataProvider.Find(cardWithReference.ScryfallId);
+            }
+            else if (!string.IsNullOrWhiteSpace(card.SetCode) && !string.IsNullOrWhiteSpace(card.CollectorNumber))
+            {
+                additionalData = _dataProvider.Find(card.SetCode, card.CollectorNumber);
             }
 
-            var data = _dataProvider.Find(card.ScryfallId);
-            if (data is null)
+            if (additionalData is null)
             {
                 yield return card;
                 continue;
@@ -33,10 +38,10 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card, IScryfal
 
             yield return card with
             {
-                Name = data.Name,
-                SetCode = data.Set,
-                CollectorNumber = data.CollectorNumber,
-                Rarity = data.Rarity
+                Name = additionalData.Name,
+                SetCode = additionalData.Set,
+                CollectorNumber = additionalData.CollectorNumber,
+                Rarity = additionalData.Rarity
             };
         }
     }

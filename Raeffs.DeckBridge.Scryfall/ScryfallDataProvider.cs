@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Scryfall.Models;
 using Raeffs.DeckBridge.Scryfall.Options;
@@ -46,5 +46,10 @@ internal class ScryfallDataProvider : IAppInitializer, IScryfallDataProvider
     public ScryfallCardData? Find(Guid id)
     {
         return _data.SingleOrDefault(x => x.Id == id);
+    }
+
+    public ScryfallCardData? Find(string setCode, string collectorNumber)
+    {
+        return _data.SingleOrDefault(x => string.Equals(x.Set, setCode, StringComparison.OrdinalIgnoreCase) && string.Equals(x.CollectorNumber, collectorNumber, StringComparison.OrdinalIgnoreCase));
     }
 }
