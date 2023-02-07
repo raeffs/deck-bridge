@@ -17,4 +17,11 @@ jobs:
       - name: restore dependencies
         run: dotnet restore
       - name: publish
-        run: dotnet publish Raeffs.DeckBridge.OfflineCli/Raeffs.DeckBridge.OfflineCli.csproj --configuration Release --runtime win-x64 --output dist
+        run: dotnet publish Raeffs.DeckBridge.OfflineCli/Raeffs.DeckBridge.OfflineCli.csproj --configuration Release --runtime win-x64 --output dist --no-restore
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: offline-cli
+          path: |
+            dist/**/*
+            !*.pdb
