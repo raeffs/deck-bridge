@@ -1,7 +1,6 @@
-﻿using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
 using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Csv;
 
 namespace Raeffs.DeckBridge.Moxfield;
 
@@ -17,19 +16,29 @@ internal class MoxfieldCardMap : ClassMap<Card>
         Map(x => x.SetCode).Name("Edition");
         Map(x => x.Condition).Name("Condition").TypeConverter<ConditionConverter>();
         Map(x => x.Language).Name("Language").TypeConverter<LanguageConverter>();
-        Map(x => x.IsFoil).Name("Foil").TypeConverter<FoilConverter>();
+        Map(x => x.IsFoil).Name("Foil").ConfigureBoolean("foil", string.Empty);
     }
 
-    public class LanguageConverter : DefaultTypeConverter
+    public class LanguageConverter : TypedConverter<Language>
     {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
+        protected override Language ConvertFromString(string text) => text switch
         {
-            return value is Language languageValue
-                ? GetLanguage(languageValue)
-                : base.ConvertToString(value, row, memberMapData);
-        }
+            "English" => Language.English,
+            "German" => Language.German,
+            "French" => Language.French,
+            "Spanish" => Language.Spanish,
+            "Italian" => Language.Italian,
+            "Simplified Chinese" => Language.SimplifiedChinese,
+            "Traditional Chinese" => Language.TraditionalChinese,
+            "Japanese" => Language.Japanese,
+            "Portuguese" => Language.Portuguese,
+            "Korean" => Language.Korean,
+            "Russian" => Language.Russian,
+            "Phyrexian" => Language.Phyrexian,
+            _ => Language.Unknown
+        };
 
-        private static string GetLanguage(Language value) => value switch
+        protected override string ConvertToString(Language value) => value switch
         {
             Language.English => "English",
             Language.German => "German",
@@ -47,16 +56,20 @@ internal class MoxfieldCardMap : ClassMap<Card>
         };
     }
 
-    public class ConditionConverter : DefaultTypeConverter
+    public class ConditionConverter : TypedConverter<Condition>
     {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
+        protected override Condition ConvertFromString(string text) => text switch
         {
-            return value is Condition conditionValue
-                ? GetCondition(conditionValue)
-                : base.ConvertToString(value, row, memberMapData);
-        }
+            "M" => Condition.Mint,
+            "NM" => Condition.NearMint,
+            "LP" => Condition.Excellent,
+            "MP" => Condition.Good,
+            "HP" => Condition.Played,
+            "DM" => Condition.Poor,
+            _ => Condition.Unknown
+        };
 
-        private static string GetCondition(Condition value) => value switch
+        protected override string ConvertToString(Condition value) => value switch
         {
             Condition.Mint => "M",
             Condition.NearMint => "NM",
@@ -66,15 +79,5 @@ internal class MoxfieldCardMap : ClassMap<Card>
             Condition.Poor => "DM",
             _ => string.Empty
         };
-    }
-
-    public class FoilConverter : DefaultTypeConverter
-    {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
-        {
-            return value is bool booleanValue
-                ? booleanValue ? "foil" : string.Empty
-                : base.ConvertToString(value, row, memberMapData);
-        }
     }
 }

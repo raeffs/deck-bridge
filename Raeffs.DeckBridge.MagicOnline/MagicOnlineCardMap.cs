@@ -1,7 +1,6 @@
-﻿using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
 using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Csv;
 
 namespace Raeffs.DeckBridge.MagicOnline;
 
@@ -17,16 +16,6 @@ internal class MagicOnlineCardMap : ClassMap<Card>
         Map(x => x.Rarity).Name("Rarity");
         Map(x => x.SetCode).Name("Set");
         Map(x => x.CollectorNumber).Name("Collector #");
-        Map(x => x.IsFoil).Name("Premium").TypeConverter<FoilConverter>();
-    }
-
-    public class FoilConverter : DefaultTypeConverter
-    {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
-        {
-            return value is bool booleanValue
-                ? booleanValue ? "Yes" : "No"
-                : base.ConvertToString(value, row, memberMapData);
-        }
+        Map(x => x.IsFoil).Name("Premium").ConfigureBoolean("Yes", "No");
     }
 }

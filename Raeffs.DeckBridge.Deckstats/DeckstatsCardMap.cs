@@ -1,7 +1,6 @@
-﻿using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
 using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Csv;
 
 namespace Raeffs.DeckBridge.Deckstats;
 
@@ -23,6 +22,11 @@ namespace Raeffs.DeckBridge.Deckstats;
 /// </summary>
 internal class DeckstatsCardMap : ClassMap<Card>
 {
+    private const string TrueValue = "1";
+    private const string FalseValue = "0";
+
+    private const string DateTimeFormat = "yyyy-MM-dd";
+
     public DeckstatsCardMap()
     {
         Map(x => x.Name).Name("card_name");
@@ -31,23 +35,32 @@ internal class DeckstatsCardMap : ClassMap<Card>
         Map(x => x.CollectorNumber).Name("collector_number");
         Map(x => x.Language).Name("language").TypeConverter<LanguageConverter>();
         Map(x => x.Condition).Name("condition").TypeConverter<ConditionConverter>();
-        Map(x => x.Added).Name("added").TypeConverter<DateTimeConverter>();
-        Map(x => x.IsFoil).Name("is_foil").TypeConverter<BooleanConverter>();
-        Map(x => x.IsPinned).Name("is_pinned").TypeConverter<BooleanConverter>();
-        Map(x => x.IsSigned).Name("is_signed").TypeConverter<BooleanConverter>();
+        Map(x => x.Added).Name("added").ConfigureDateTime(DateTimeFormat);
+        Map(x => x.IsFoil).Name("is_foil").ConfigureBoolean(TrueValue, FalseValue);
+        Map(x => x.IsPinned).Name("is_pinned").ConfigureBoolean(TrueValue, FalseValue);
+        Map(x => x.IsSigned).Name("is_signed").ConfigureBoolean(TrueValue, FalseValue);
         Map(x => x.Comment).Name("comment");
     }
 
-    public class LanguageConverter : DefaultTypeConverter
+    public class LanguageConverter : TypedConverter<Language>
     {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
+        protected override Language ConvertFromString(string text) => text switch
         {
-            return value is Language languageValue
-                ? GetLanguage(languageValue)
-                : base.ConvertToString(value, row, memberMapData);
-        }
+            "en" => Language.English,
+            "de" => Language.German,
+            "fr" => Language.French,
+            "es" => Language.Spanish,
+            "it" => Language.Italian,
+            "cn" => Language.SimplifiedChinese,
+            "jp" => Language.Japanese,
+            "pt" => Language.Portuguese,
+            "kr" => Language.Korean,
+            "ru" => Language.Russian,
+            "ph" => Language.Phyrexian,
+            _ => Language.Unknown
+        };
 
-        private static string GetLanguage(Language value) => value switch
+        protected override string ConvertToString(Language value) => value switch
         {
             Language.English => "en",
             Language.German => "de",
@@ -64,16 +77,19 @@ internal class DeckstatsCardMap : ClassMap<Card>
         };
     }
 
-    public class ConditionConverter : DefaultTypeConverter
+    public class ConditionConverter : TypedConverter<Condition>
     {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
+        protected override Condition ConvertFromString(string text) => text switch
         {
-            return value is Condition conditionValue
-                ? GetCondition(conditionValue)
-                : base.ConvertToString(value, row, memberMapData);
-        }
+            "NM" => Condition.NearMint,
+            "LP" => Condition.Excellent,
+            "MP" => Condition.Good,
+            "HP" => Condition.Played,
+            "DM" => Condition.Poor,
+            _ => Condition.Unknown
+        };
 
-        private static string GetCondition(Condition value) => value switch
+        protected override string ConvertToString(Condition value) => value switch
         {
             Condition.Mint or Condition.NearMint => "NM",
             Condition.Excellent => "LP",
@@ -82,25 +98,5 @@ internal class DeckstatsCardMap : ClassMap<Card>
             Condition.Poor => "DM",
             _ => string.Empty
         };
-    }
-
-    public class DateTimeConverter : DefaultTypeConverter
-    {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
-        {
-            return value is DateTime dateTimeValue
-                ? dateTimeValue.ToString("yyyy-MM-dd")
-                : base.ConvertToString(value, row, memberMapData);
-        }
-    }
-
-    public class BooleanConverter : DefaultTypeConverter
-    {
-        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
-        {
-            return value is bool booleanValue
-                ? booleanValue ? "1" : "0"
-                : base.ConvertToString(value, row, memberMapData);
-        }
     }
 }
