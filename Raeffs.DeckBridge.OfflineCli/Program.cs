@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Raeffs.DeckBridge.Engine;
 using Raeffs.DeckBridge.OfflineCli;
 
-var parser = new Parser();
+var parser = new Parser(settings => settings.CaseSensitive = false);
 var result = parser.ParseArguments<Options>(args);
 
 if (result.Errors.Any())
