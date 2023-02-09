@@ -33,19 +33,6 @@ try
         Environment.Exit(1);
     }
 
-    if (!File.Exists(options.InputFile))
-    {
-        await Console.Error.WriteLineAsync($"The file '{options.InputFile}' does not exist or cannot be accessed!");
-        Environment.Exit(1);
-    }
-
-    var outputToFile = !string.IsNullOrWhiteSpace(options.OutputFile);
-    if (outputToFile && File.Exists(options.OutputFile) && !options.Force)
-    {
-        await Console.Error.WriteLineAsync($"The file '{options.OutputFile}' does already exist!");
-        Environment.Exit(1);
-    }
-
     var builder = Host.CreateApplicationBuilder();
 
     builder.Services
@@ -59,22 +46,9 @@ try
 
     await host.InitializeEngineAsync().ConfigureAwait(false);
 
-    var readers = host.Services.GetRequiredService<IDeckReaderCollection>();
-    var writers = host.Services.GetRequiredService<IDeckWriterCollection>();
-
-    var reader = readers.Find(options.InputFormat);
-    var writer = writers.Find(options.OutputFormat);
-
-    if (outputToFile)
-    {
-        await using var outStream = new FileStream(options.OutputFile, FileMode.Create, FileAccess.Write, FileShare.None);
-        await writer.WriteDeckAsync(outStream, reader.ReadDeckAsync(options.InputFile));
-    }
-    else
-    {
-        await using var outStream = Console.OpenStandardOutput();
-        await writer.WriteDeckAsync(outStream, reader.ReadDeckAsync(options.InputFile));
-    }
+    var factory = host.Services.GetRequiredService<IDeckConverterFactory>();
+    var converter = factory.CreateConverter(options.InputFormat, options.OutputFormat);
+    await converter.ConvertDecksAsync(options.Input, options.Output).ConfigureAwait(false);
 }
 catch (Exception exception)
 {

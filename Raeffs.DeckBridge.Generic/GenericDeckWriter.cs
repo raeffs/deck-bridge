@@ -1,4 +1,4 @@
-﻿using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Common;
 
 namespace Raeffs.DeckBridge.Generic;
 
@@ -6,7 +6,7 @@ internal class GenericDeckWriter : IDeckWriter
 {
     public DeckWriterProvider ProviderName => DeckWriterProvider.Generic;
 
-    public async Task WriteDeckAsync(Stream stream, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
+    public async Task WriteDeckAsync(Stream stream, Deck deck, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
     {
         await using var writer = new StreamWriter(stream);
 

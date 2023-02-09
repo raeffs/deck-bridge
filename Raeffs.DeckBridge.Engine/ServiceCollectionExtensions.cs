@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Raeffs.DeckBridge.Deckstats;
 using Raeffs.DeckBridge.DelverLens;
@@ -23,7 +23,8 @@ public static class ServiceCollectionExtensions
 
         services
             .AddTransient<IDeckReaderCollection, DeckReaderCollection>()
-            .AddTransient<IDeckWriterCollection, DeckWriterCollection>();
+            .AddTransient<IDeckWriterCollection, DeckWriterCollection>()
+            .AddTransient<IDeckConverterFactory, DeckConverterFactory>();
 
         return services;
     }

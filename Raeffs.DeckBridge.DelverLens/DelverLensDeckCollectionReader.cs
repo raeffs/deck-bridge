@@ -9,11 +9,20 @@ internal class DelverLensDeckCollectionReader : IDeckCollectionReader
     private static readonly ColumnDefinition IdColumn = new("_id", 0);
     private static readonly ColumnDefinition NameColumn = new("name", 3);
 
+    private readonly IDeckReader<Card> _reader;
+
     public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
 
-    public async IAsyncEnumerable<Deck> ReadDecksAsync(string filename, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public bool SupportsMultipleDecksInFile => true;
+
+    public DelverLensDeckCollectionReader(IEnumerable<IDeckReader<Card>> readers)
     {
-        using var connection = new SQLiteConnection($"URI=file:{filename};mode=ReadOnly");
+        _reader = readers.Single(x => x.ProviderName == ProviderName);
+    }
+
+    public async IAsyncEnumerable<DeckWithCards> ReadDecksAsync(string source, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        using var connection = new SQLiteConnection($"URI=file:{source};mode=ReadOnly");
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
         using var command = new SQLiteCommand("SELECT * FROM lists", connection);
@@ -25,10 +34,17 @@ internal class DelverLensDeckCollectionReader : IDeckCollectionReader
 
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
-            yield return new()
+            var deck = new Deck
             {
                 Id = reader.GetInt32(idIndex).ToString(),
                 Name = reader.GetString(nameIndex),
+            };
+
+            yield return new()
+            {
+                Id = deck.Id,
+                Name = deck.Name,
+                Cards = _reader.ReadDeckAsync(source, deck, cancellationToken)
             };
         }
     }

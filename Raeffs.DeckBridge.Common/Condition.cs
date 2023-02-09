@@ -1,25 +1,44 @@
-﻿namespace Raeffs.DeckBridge.Common;
+namespace Raeffs.DeckBridge.Common;
 
 /// <summary>
 /// https://www.cardmarket.com/en/Help/CardCondition
-/// 
-/// European -> American
-/// Mint -> Mint
-/// Near Mint -> Near Mint
-/// Excellent -> Lightly Played
-/// Good -> Moderately Played
-/// Light Played -> Played
-/// Played -> Heavily Played
-/// Poor -> Damaged
 /// </summary>
 public enum Condition
 {
     Unknown,
+
+    /// <summary>
+    /// American equivalent: Mint
+    /// </summary>
     Mint,
+
+    /// <summary>
+    /// American equivalent: Near Mint
+    /// </summary>
     NearMint,
+
+    /// <summary>
+    /// American equivalent: Slightly Played or Lightly Played
+    /// </summary>
     Excellent,
+
+    /// <summary>
+    /// American equivalent: Moderately Played
+    /// </summary>
     Good,
+
+    /// <summary>
+    /// American equivalent: Played
+    /// </summary>
     LightPlayed,
+
+    /// <summary>
+    /// American equivalent: Heavily Played
+    /// </summary>
     Played,
+
+    /// <summary>
+    /// American equivalent: Poor or Damaged
+    /// </summary>
     Poor
 }

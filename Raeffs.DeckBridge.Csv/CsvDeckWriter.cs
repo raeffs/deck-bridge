@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using CsvHelper.Configuration;
 using Raeffs.DeckBridge.Common;
 using System.Globalization;
@@ -12,7 +12,7 @@ public abstract class CsvDeckWriter<TMap> : IDeckWriter
 
     public abstract DeckWriterProvider ProviderName { get; }
 
-    public async Task WriteDeckAsync(Stream stream, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
+    public async Task WriteDeckAsync(Stream stream, Deck deck, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
     {
         await using var writer = new StreamWriter(stream);
         await using var csv = new CsvWriter(writer, _configuration);

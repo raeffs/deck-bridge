@@ -9,6 +9,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDeckstats(this IServiceCollection services)
     {
         services.AddTransient<IDeckWriter, DeckstatsDeckWriter>();
+        services.AddTransient<IDeckCollectionWriter, DeckstatsDeckCollectionWriter>();
 
         services.AddTransient<DeckstatsDeckReader>();
         services.AddDeckReaderWithScryfallData<DeckstatsDeckReader, Card>();

@@ -21,7 +21,7 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
         using var connection = new SQLiteConnection($"URI=file:{filename};mode=ReadOnly");
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
-        using var command = new SQLiteCommand("SELECT * FROM cards", connection);
+        using var command = await GetCommandAsync(connection, deck, cancellationToken).ConfigureAwait(false);
         using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
 
         var schema = await reader.GetColumnSchemaAsync(cancellationToken).ConfigureAwait(false);
@@ -45,6 +45,21 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
                 Condition = GetCondition(reader.GetString(conditionIndex)),
                 Language = GetLanguage(reader.GetString(languageIndex))
             };
+        }
+    }
+
+    private static async Task<SQLiteCommand> GetCommandAsync(SQLiteConnection connection, Deck deck, CancellationToken cancellationToken)
+    {
+        if (deck == Deck.AllCards)
+        {
+            return new SQLiteCommand("SELECT * FROM cards", connection);
+        }
+        else
+        {
+            var command = new SQLiteCommand("SELECT * FROM cards WHERE list = @DeckId", connection);
+            command.Parameters.AddWithValue("@DeckId", deck.Id);
+            await command.PrepareAsync(cancellationToken).ConfigureAwait(false);
+            return command;
         }
     }
 

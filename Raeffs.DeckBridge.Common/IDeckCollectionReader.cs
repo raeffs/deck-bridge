@@ -4,5 +4,7 @@ public interface IDeckCollectionReader
 {
     DeckReaderProvider ProviderName { get; }
 
-    IAsyncEnumerable<Deck> ReadDecksAsync(string filename, CancellationToken cancellationToken = default);
+    bool SupportsMultipleDecksInFile { get; }
+
+    IAsyncEnumerable<DeckWithCards> ReadDecksAsync(string source, CancellationToken cancellationToken = default);
 }
