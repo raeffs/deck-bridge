@@ -41,6 +41,8 @@ internal class ScryfallDataProvider : IAppInitializer, IScryfallDataProvider
             await DownloadDataAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        _logger.LogDebug("Loading scryfall data");
+
         var data = new List<ScryfallCardData>();
 
         using var stream = File.OpenRead(_options.Value.BulkDataFile);
@@ -53,6 +55,8 @@ internal class ScryfallDataProvider : IAppInitializer, IScryfallDataProvider
         }
 
         _data = data;
+
+        _logger.LogDebug("Scryfall data loaded");
     }
 
     public ScryfallCardData? Find(Guid id)

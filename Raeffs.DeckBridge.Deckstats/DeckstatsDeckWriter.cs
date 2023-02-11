@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Text;
@@ -8,8 +9,8 @@ internal class DeckstatsDeckWriter : TextDeckWriter
 {
     public override DeckWriterProvider ProviderName => DeckWriterProvider.DeckstatsDeck;
 
-    public DeckstatsDeckWriter(IOptions<CommonOptions> options)
-        : base(options)
+    public DeckstatsDeckWriter(IOptions<CommonOptions> options, ILogger<DeckstatsDeckWriter> logger)
+        : base(options, logger)
     {
     }
 
@@ -22,7 +23,7 @@ internal class DeckstatsDeckWriter : TextDeckWriter
 
         if (!string.IsNullOrWhiteSpace(card.SetCode))
         {
-            parts.Add($"[{card.SetCode}]");
+            parts.Add(string.IsNullOrWhiteSpace(card.CollectorNumber) ? $"[{card.SetCode}]" : $"[{card.SetCode}#{card.CollectorNumber}]");
         }
 
         parts.Add(card.Name);

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Text;
@@ -8,8 +9,8 @@ internal class GenericDeckWriter : TextDeckWriter
 {
     public override DeckWriterProvider ProviderName => DeckWriterProvider.Generic;
 
-    public GenericDeckWriter(IOptions<CommonOptions> options)
-        : base(options)
+    public GenericDeckWriter(IOptions<CommonOptions> options, ILogger<GenericDeckWriter> logger)
+        : base(options, logger)
     {
     }
 

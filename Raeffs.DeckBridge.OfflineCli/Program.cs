@@ -2,8 +2,15 @@ using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Raeffs.DeckBridge.Engine;
 using Raeffs.DeckBridge.OfflineCli;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var parser = new Parser(settings => settings.CaseSensitive = false);
 var result = parser.ParseArguments<Options>(args);
@@ -28,6 +35,10 @@ try
     }
 
     var builder = Host.CreateApplicationBuilder();
+
+    builder.Logging
+        .ClearProviders()
+        .AddSerilog();
 
     builder.Services
         .AddDeckBridgeEngine(new EngineOptions

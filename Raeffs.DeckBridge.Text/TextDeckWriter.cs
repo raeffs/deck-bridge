@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 
@@ -6,12 +7,14 @@ namespace Raeffs.DeckBridge.Text;
 public abstract class TextDeckWriter : IDeckWriter
 {
     private readonly IOptions<CommonOptions> _options;
+    private readonly ILogger<TextDeckWriter> _logger;
 
     public abstract DeckWriterProvider ProviderName { get; }
 
-    public TextDeckWriter(IOptions<CommonOptions> options)
+    public TextDeckWriter(IOptions<CommonOptions> options, ILogger<TextDeckWriter> logger)
     {
         _options = options;
+        _logger = logger;
     }
 
     public async Task WriteDeckAsync(Stream stream, Deck deck, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
@@ -41,6 +44,7 @@ public abstract class TextDeckWriter : IDeckWriter
                 throw new ArgumentException($"The file '{destinationFile}' does already exist!");
             }
 
+            _logger.LogInformation("Writing deck {DeckName} to {Destination}", deck.Name, destinationFile);
             await using var stream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None);
             await WriteDeckAsync(stream, deck, deck.Cards, cancellationToken).ConfigureAwait(false);
         }
