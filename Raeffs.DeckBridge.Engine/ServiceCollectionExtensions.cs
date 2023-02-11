@@ -13,6 +13,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDeckBridgeEngine(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpClient();
+
         services
             .AddGeneric()
             .AddDelverLens(configuration.GetSection("DelverLens"))

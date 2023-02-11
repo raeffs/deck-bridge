@@ -21,12 +21,6 @@ try
 {
     var options = result.Value;
 
-    if (!File.Exists(options.ScryfallBulkDataFile))
-    {
-        await Console.Error.WriteLineAsync($"The scryfall bulk data file '{options.ScryfallBulkDataFile}' does not exist or cannot be accessed!");
-        Environment.Exit(1);
-    }
-
     if (!File.Exists(options.DelverLensDataFile))
     {
         await Console.Error.WriteLineAsync($"The delver lens data file '{options.DelverLensDataFile}' does not exist or cannot be accessed!");
