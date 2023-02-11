@@ -17,7 +17,6 @@ internal class DeckConverterFactory : IDeckConverterFactory
         return new DeckConverter(
             GetCollectionReader(from),
             GetReader(from),
-            GetCollectionWriter(to),
             GetWriter(to)
         );
     }
@@ -34,13 +33,6 @@ internal class DeckConverterFactory : IDeckConverterFactory
         return _services.GetRequiredService<IEnumerable<IDeckReader<Card>>>()
             .SingleOrDefault(x => x.ProviderName == provider)
             ?? new NullDeckReader(provider);
-    }
-
-    private IDeckCollectionWriter GetCollectionWriter(DeckWriterProvider provider)
-    {
-        return _services.GetRequiredService<IEnumerable<IDeckCollectionWriter>>()
-            .SingleOrDefault(x => x.ProviderName == provider)
-            ?? new NullDeckCollectionWriter(provider);
     }
 
     private IDeckWriter GetWriter(DeckWriterProvider provider)

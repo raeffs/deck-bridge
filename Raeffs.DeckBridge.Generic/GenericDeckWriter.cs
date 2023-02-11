@@ -17,4 +17,9 @@ internal class GenericDeckWriter : IDeckWriter
 
         await writer.FlushAsync().ConfigureAwait(false);
     }
+
+    public Task WriteMultipleDecksAsync(string destination, IAsyncEnumerable<DeckWithCards> decks, CancellationToken cancellationToken = default)
+    {
+        throw new NotSupportedException();
+    }
 }

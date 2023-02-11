@@ -30,4 +30,24 @@ public abstract class CsvDeckWriter<TMap> : IDeckWriter
 
         await csv.FlushAsync().ConfigureAwait(false);
     }
+
+    public async Task WriteMultipleDecksAsync(string destination, IAsyncEnumerable<DeckWithCards> decks, CancellationToken cancellationToken = default)
+    {
+        if (!Directory.Exists(destination))
+        {
+            Directory.CreateDirectory(destination);
+        }
+
+        await foreach (var deck in decks.WithCancellation(cancellationToken).ConfigureAwait(false))
+        {
+            var destinationFile = Path.Join(destination, $"{deck.Name}.csv");
+            if (File.Exists(destinationFile))
+            {
+                throw new ArgumentException($"The file '{destinationFile}' does already exist!");
+            }
+
+            await using var stream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None);
+            await WriteDeckAsync(stream, deck, deck.Cards, cancellationToken).ConfigureAwait(false);
+        }
+    }
 }

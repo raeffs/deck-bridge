@@ -6,19 +6,16 @@ internal class DeckConverter : IDeckConverter
 {
     private readonly IDeckCollectionReader _collectionReader;
     private readonly IDeckReader<Card> _reader;
-    private readonly IDeckCollectionWriter _collectionWriter;
     private readonly IDeckWriter _writer;
 
     public DeckConverter(
         IDeckCollectionReader collectionReader,
         IDeckReader<Card> reader,
-        IDeckCollectionWriter collectionWriter,
         IDeckWriter writer
     )
     {
         _collectionReader = collectionReader;
         _reader = reader;
-        _collectionWriter = collectionWriter;
         _writer = writer;
     }
 
@@ -38,7 +35,7 @@ internal class DeckConverter : IDeckConverter
 
     private IDeckConverter SelectStrategy(bool canReadMultipleDecks) => canReadMultipleDecks switch
     {
-        true => new CollectionConverterStrategy(_collectionReader, _collectionWriter),
+        true => new CollectionConverterStrategy(_collectionReader, _writer),
         false => throw new NotSupportedException()
     };
 }
@@ -46,9 +43,9 @@ internal class DeckConverter : IDeckConverter
 internal class CollectionConverterStrategy : IDeckConverter
 {
     private readonly IDeckCollectionReader _reader;
-    private readonly IDeckCollectionWriter _writer;
+    private readonly IDeckWriter _writer;
 
-    public CollectionConverterStrategy(IDeckCollectionReader reader, IDeckCollectionWriter writer)
+    public CollectionConverterStrategy(IDeckCollectionReader reader, IDeckWriter writer)
     {
         _reader = reader;
         _writer = writer;
@@ -56,9 +53,7 @@ internal class CollectionConverterStrategy : IDeckConverter
 
     public async Task ConvertDecksAsync(string source, string destination, CancellationToken cancellationToken = default)
     {
-        await foreach (var deck in _reader.ReadDecksAsync(source, cancellationToken).ConfigureAwait(false))
-        {
-            await _writer.WriteDeckAsync(destination, deck, cancellationToken).ConfigureAwait(false);
-        }
+        var decks = _reader.ReadDecksAsync(source, cancellationToken);
+        await _writer.WriteMultipleDecksAsync(destination, decks, cancellationToken).ConfigureAwait(false);
     }
 }

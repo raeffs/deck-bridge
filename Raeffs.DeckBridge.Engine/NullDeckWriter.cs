@@ -15,4 +15,9 @@ internal class NullDeckWriter : IDeckWriter
     {
         throw new NotImplementedException();
     }
+
+    public Task WriteMultipleDecksAsync(string destination, IAsyncEnumerable<DeckWithCards> decks, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Raeffs.DeckBridge.Engine;
+namespace Raeffs.DeckBridge.Engine;
 
 public record EngineOptions
 {
