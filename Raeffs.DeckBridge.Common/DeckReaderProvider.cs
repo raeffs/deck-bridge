@@ -1,7 +1,6 @@
-﻿namespace Raeffs.DeckBridge.Common;
+namespace Raeffs.DeckBridge.Common;
 
 public enum DeckReaderProvider
 {
     DelverLens,
-    Deckstats,
 }

@@ -1,25 +1,17 @@
+using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Text;
 
 namespace Raeffs.DeckBridge.Generic;
 
-internal class GenericDeckWriter : IDeckWriter
+internal class GenericDeckWriter : TextDeckWriter
 {
-    public DeckWriterProvider ProviderName => DeckWriterProvider.Generic;
+    public override DeckWriterProvider ProviderName => DeckWriterProvider.Generic;
 
-    public async Task WriteDeckAsync(Stream stream, Deck deck, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
+    public GenericDeckWriter(IOptions<CommonOptions> options)
+        : base(options)
     {
-        await using var writer = new StreamWriter(stream);
-
-        await foreach (var card in cards.WithCancellation(cancellationToken).ConfigureAwait(false))
-        {
-            await writer.WriteLineAsync($"{card.Quantity}x {card.Name}").ConfigureAwait(false);
-        }
-
-        await writer.FlushAsync().ConfigureAwait(false);
     }
 
-    public Task WriteMultipleDecksAsync(string destination, IAsyncEnumerable<DeckWithCards> decks, CancellationToken cancellationToken = default)
-    {
-        throw new NotSupportedException();
-    }
+    protected override string ConvertCardToLine(Card card) => $"{card.Quantity} {card.Name}";
 }

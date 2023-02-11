@@ -15,6 +15,7 @@
     <ProjectReference Include="..\Raeffs.DeckBridge.Common\Raeffs.DeckBridge.Common.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.Csv\Raeffs.DeckBridge.Csv.csproj" />
     <ProjectReference Include="..\Raeffs.DeckBridge.Scryfall\Raeffs.DeckBridge.Scryfall.csproj" />
+    <ProjectReference Include="..\Raeffs.DeckBridge.Text\Raeffs.DeckBridge.Text.csproj" />
   </ItemGroup>
 
 </Project>

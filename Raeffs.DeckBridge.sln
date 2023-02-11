@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.Csv", "Ra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raeffs.DeckBridge.MagicOnline", "Raeffs.DeckBridge.MagicOnline\Raeffs.DeckBridge.MagicOnline.csproj", "{DEF91E8D-6B43-418F-8751-129E6BA8975D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raeffs.DeckBridge.Text", "Raeffs.DeckBridge.Text\Raeffs.DeckBridge.Text.csproj", "{325D47CB-2972-4D87-B654-5D3EF44998FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEF91E8D-6B43-418F-8751-129E6BA8975D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325D47CB-2972-4D87-B654-5D3EF44998FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325D47CB-2972-4D87-B654-5D3EF44998FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325D47CB-2972-4D87-B654-5D3EF44998FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325D47CB-2972-4D87-B654-5D3EF44998FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,14 +20,14 @@ namespace Raeffs.DeckBridge.Deckstats;
 /// is_signed: Should contain a 1 if the card is signed, empty otherwise
 /// comment: A comment/notes about the card[can also be called Notes]
 /// </summary>
-internal class DeckstatsCardMap : ClassMap<Card>
+internal class DeckstatsCollectionCardMap : ClassMap<Card>
 {
     private const string TrueValue = "1";
     private const string FalseValue = "0";
 
     private const string DateTimeFormat = "yyyy-MM-dd";
 
-    public DeckstatsCardMap()
+    public DeckstatsCollectionCardMap()
     {
         Map(x => x.Name).Name("card_name");
         Map(x => x.Quantity).Name("amount");

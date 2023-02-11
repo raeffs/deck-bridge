@@ -1,9 +1,10 @@
-﻿namespace Raeffs.DeckBridge.Common;
+namespace Raeffs.DeckBridge.Common;
 
 public enum DeckWriterProvider
 {
     Generic,
-    Deckstats,
+    DeckstatsCollection,
+    DeckstatsDeck,
     Moxfield,
     MagicOnline,
 }
