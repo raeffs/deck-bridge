@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Deckstats;
 using Raeffs.DeckBridge.DelverLens;
 using Raeffs.DeckBridge.Generic;
@@ -14,6 +15,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDeckBridgeEngine(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClient();
+
+        services.Configure<CommonOptions>(configuration);
 
         services
             .AddGeneric()
@@ -36,6 +39,7 @@ public static class ServiceCollectionExtensions
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
+                { "Force", options.Force.ToString() },
                 { "Scryfall:BulkDataFile", options.ScryfallBulkDataFile },
                 { "DelverLens:DataFile", options.DelverLensDataFile }
             })

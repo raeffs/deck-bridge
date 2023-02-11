@@ -32,6 +32,7 @@ try
     builder.Services
         .AddDeckBridgeEngine(new EngineOptions
         {
+            Force = options.Force,
             ScryfallBulkDataFile = options.ScryfallBulkDataFile,
             DelverLensDataFile = options.DelverLensDataFile
         });

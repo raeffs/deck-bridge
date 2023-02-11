@@ -1,5 +1,6 @@
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 using System.Globalization;
 
@@ -9,8 +10,14 @@ public abstract class CsvDeckWriter<TMap> : IDeckWriter
     where TMap : ClassMap<Card>
 {
     private readonly CsvConfiguration _configuration = new(CultureInfo.InvariantCulture);
+    private readonly IOptions<CommonOptions> _options;
 
     public abstract DeckWriterProvider ProviderName { get; }
+
+    public CsvDeckWriter(IOptions<CommonOptions> options)
+    {
+        _options = options;
+    }
 
     public async Task WriteDeckAsync(Stream stream, Deck deck, IAsyncEnumerable<Card> cards, CancellationToken cancellationToken = default)
     {
@@ -41,7 +48,7 @@ public abstract class CsvDeckWriter<TMap> : IDeckWriter
         await foreach (var deck in decks.WithCancellation(cancellationToken).ConfigureAwait(false))
         {
             var destinationFile = Path.Join(destination, $"{deck.Name}.csv");
-            if (File.Exists(destinationFile))
+            if (!_options.Value.Force && File.Exists(destinationFile))
             {
                 throw new ArgumentException($"The file '{destinationFile}' does already exist!");
             }
