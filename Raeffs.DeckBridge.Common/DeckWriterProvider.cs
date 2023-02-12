@@ -5,6 +5,7 @@ public enum DeckWriterProvider
     Generic,
     DeckstatsCollection,
     DeckstatsDeck,
-    Moxfield,
+    MoxfieldCollection,
+    MoxfieldDeck,
     MagicOnline,
 }

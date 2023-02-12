@@ -7,9 +7,9 @@ namespace Raeffs.DeckBridge.Moxfield;
 /// <summary>
 /// https://www.moxfield.com/help/importing-collection
 /// </summary>
-internal class MoxfieldCardMap : ClassMap<Card>
+internal class MoxfieldCollectionCardMap : ClassMap<Card>
 {
-    public MoxfieldCardMap()
+    public MoxfieldCollectionCardMap()
     {
         Map(x => x.Quantity).Name("Count");
         Map(x => x.Name).Name("Name");
