@@ -59,14 +59,50 @@ internal class ScryfallDataProvider : IAppInitializer, IScryfallDataProvider
         _logger.LogDebug("Scryfall data loaded");
     }
 
-    public ScryfallCardData? Find(Guid id)
+    public async Task<ScryfallCardData?> FindAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return _data.SingleOrDefault(x => x.Id == id);
+        return _data.SingleOrDefault(x => x.Id == id)
+            ?? await GetOnlineCardDataAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
-    public ScryfallCardData? Find(string setCode, string collectorNumber)
+    public async Task<ScryfallCardData?> FindAsync(string setCode, string collectorNumber, CancellationToken cancellationToken = default)
     {
-        return _data.SingleOrDefault(x => string.Equals(x.Set, setCode, StringComparison.OrdinalIgnoreCase) && string.Equals(x.CollectorNumber, collectorNumber, StringComparison.OrdinalIgnoreCase));
+        return _data.SingleOrDefault(x => string.Equals(x.Set, setCode, StringComparison.OrdinalIgnoreCase) && string.Equals(x.CollectorNumber, collectorNumber, StringComparison.OrdinalIgnoreCase))
+            ?? await GetOnlineCardDataAsync(setCode, collectorNumber, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<ScryfallCardData?> GetOnlineCardDataAsync(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var response = await _httpClient.GetAsync($"https://api.scryfall.com/cards/{id}", cancellationToken).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            return await JsonSerializer.DeserializeAsync<ScryfallCardData>(stream, _serializerOptions, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(exception, "Failed to fetch online card data for card with Scryfall id {ScryfallId}", id);
+            return null;
+        }
+    }
+
+    private async Task<ScryfallCardData?> GetOnlineCardDataAsync(string setCode, string collectorNumber, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var response = await _httpClient.GetAsync($"https://api.scryfall.com/cards/{setCode}/{collectorNumber}", cancellationToken).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            return await JsonSerializer.DeserializeAsync<ScryfallCardData>(stream, _serializerOptions, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(exception, "Failed to fetch online card data for card with set code {SetCode} and number {CollectorNumber}", setCode, collectorNumber);
+            return null;
+        }
     }
 
     private async Task DownloadDataAsync(CancellationToken cancellationToken)

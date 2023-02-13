@@ -21,21 +21,21 @@ internal class ScryfallDataEnricher<T> : IDeckReader<T> where T : Card
     {
         await foreach (var card in _underlyingReader.ReadDeckAsync(filename, deck, cancellationToken).ConfigureAwait(false))
         {
-            yield return EnrichCard(card);
+            yield return await EnrichCardAsync(card, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    private T EnrichCard(T card)
+    private async Task<T> EnrichCardAsync(T card, CancellationToken cancellationToken)
     {
         var additionalData = default(ScryfallCardData?);
 
         if (card is IScryfallCardReference cardWithReference && cardWithReference.ScryfallId != Guid.Empty)
         {
-            additionalData = _dataProvider.Find(cardWithReference.ScryfallId);
+            additionalData = await _dataProvider.FindAsync(cardWithReference.ScryfallId, cancellationToken).ConfigureAwait(false);
         }
         else if (!string.IsNullOrWhiteSpace(card.SetCode) && !string.IsNullOrWhiteSpace(card.CollectorNumber))
         {
-            additionalData = _dataProvider.Find(card.SetCode, card.CollectorNumber);
+            additionalData = await _dataProvider.FindAsync(card.SetCode, card.CollectorNumber, cancellationToken).ConfigureAwait(false);
         }
 
         return additionalData is null

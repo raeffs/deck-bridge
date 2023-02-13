@@ -4,7 +4,7 @@ namespace Raeffs.DeckBridge.Scryfall;
 
 internal interface IScryfallDataProvider
 {
-    ScryfallCardData? Find(Guid id);
+    Task<ScryfallCardData?> FindAsync(Guid id, CancellationToken cancellationToken = default);
 
-    ScryfallCardData? Find(string setCode, string collectorNumber);
+    Task<ScryfallCardData?> FindAsync(string setCode, string collectorNumber, CancellationToken cancellationToken = default);
 }
