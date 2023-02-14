@@ -19,4 +19,10 @@
     <ProjectReference Include="..\Raeffs.DeckBridge.Scryfall\Raeffs.DeckBridge.Scryfall.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="delverlens-mappings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -27,13 +27,6 @@ if (result.Errors.Any())
 try
 {
     var options = result.Value;
-
-    if (!File.Exists(options.DelverLensDataFile))
-    {
-        await Console.Error.WriteLineAsync($"The delver lens data file '{options.DelverLensDataFile}' does not exist or cannot be accessed!");
-        Environment.Exit(1);
-    }
-
     var builder = Host.CreateApplicationBuilder();
 
     builder.Logging

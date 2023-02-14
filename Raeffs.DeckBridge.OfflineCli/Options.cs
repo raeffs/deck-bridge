@@ -20,7 +20,7 @@ internal record Options
     [Option("force", HelpText = "Overwrite the output files if they already exists.")]
     public bool Force { get; init; }
 
-    [Option("delverLensDataFile", Default = "dlens.db")]
+    [Option("delverLensDataFile", Default = "delverlens-mappings.json")]
     public string DelverLensDataFile { get; init; } = "dlens.db";
 
     [Option("scryfallBulkDataFile", Default = "scryfall.json")]

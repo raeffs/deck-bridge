@@ -1,8 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
-using Raeffs.DeckBridge.DelverLens.Options;
 using Raeffs.DeckBridge.Scryfall;
 
 namespace Raeffs.DeckBridge.DelverLens;
@@ -13,12 +11,12 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<DelverLensOptions>(configuration);
 
+        services.AddSingleton<DelverLensDataProvider>();
+        services.AddTransient<IAppInitializer>(services => services.GetRequiredService<DelverLensDataProvider>());
+        services.AddTransient<IDelverLensDataProvider>(services => services.GetRequiredService<DelverLensDataProvider>());
+
         services.AddTransient<DelverLensDeckReader>();
-        services.AddTransient(services => new ScryfallReferenceEnricher(
-            services.GetRequiredService<DelverLensDeckReader>(),
-            services.GetRequiredService<IOptions<DelverLensOptions>>()
-        ));
-        services.AddDeckReaderWithScryfallData<ScryfallReferenceEnricher, DelverLensCard>();
+        services.AddDeckReaderWithScryfallData<DelverLensDeckReader, DelverLensCard>();
 
         services.AddTransient<IDeckCollectionReader, DelverLensDeckCollectionReader>();
 

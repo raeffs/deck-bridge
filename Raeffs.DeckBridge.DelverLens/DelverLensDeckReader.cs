@@ -13,8 +13,14 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
     private static readonly ColumnDefinition NoteColumn = new("note", 8);
     private static readonly ColumnDefinition ConditionColumn = new("condition", 9);
     private static readonly ColumnDefinition LanguageColumn = new("language", 10);
+    private readonly IDelverLensDataProvider _delverLensDataProvider;
 
     public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
+
+    public DelverLensDeckReader(IDelverLensDataProvider delverLensDataProvider)
+    {
+        _delverLensDataProvider = delverLensDataProvider;
+    }
 
     public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -35,15 +41,17 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
 
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
+            var id = reader.GetInt32(cardIndex);
+
             yield return new()
             {
-                InternalId = reader.GetInt32(cardIndex),
                 IsFoil = reader.GetBoolean(foilIndex),
                 Quantity = reader.GetInt32(quantityIndex),
                 Added = DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(creationIndex)).UtcDateTime,
                 Comment = reader.GetString(noteIndex),
                 Condition = GetCondition(reader.GetString(conditionIndex)),
-                Language = GetLanguage(reader.GetString(languageIndex))
+                Language = GetLanguage(reader.GetString(languageIndex)),
+                ScryfallId = _delverLensDataProvider.Find(id)
             };
         }
     }
