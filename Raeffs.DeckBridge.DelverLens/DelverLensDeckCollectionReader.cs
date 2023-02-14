@@ -9,13 +9,13 @@ internal class DelverLensDeckCollectionReader : IDeckCollectionReader
     private static readonly ColumnDefinition IdColumn = new("_id", 0);
     private static readonly ColumnDefinition NameColumn = new("name", 3);
 
-    private readonly IDeckReader<Card> _reader;
+    private readonly IDeckReader _reader;
 
     public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
 
     public bool SupportsMultipleDecksInFile => true;
 
-    public DelverLensDeckCollectionReader(IEnumerable<IDeckReader<Card>> readers)
+    public DelverLensDeckCollectionReader(IEnumerable<IDeckReader> readers)
     {
         _reader = readers.Single(x => x.ProviderName == ProviderName);
     }

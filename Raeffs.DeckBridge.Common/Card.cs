@@ -1,4 +1,4 @@
-﻿namespace Raeffs.DeckBridge.Common;
+namespace Raeffs.DeckBridge.Common;
 
 public record Card
 {
@@ -25,4 +25,6 @@ public record Card
     public string CollectorNumber { get; init; } = string.Empty;
 
     public Rarity Rarity { get; init; }
+
+    public Guid ScryfallId { get; init; }
 }

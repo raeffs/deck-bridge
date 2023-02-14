@@ -5,12 +5,12 @@ namespace Raeffs.DeckBridge.Engine;
 internal class DeckConverter : IDeckConverter
 {
     private readonly IDeckCollectionReader _collectionReader;
-    private readonly IDeckReader<Card> _reader;
+    private readonly IDeckReader _reader;
     private readonly IDeckWriter _writer;
 
     public DeckConverter(
         IDeckCollectionReader collectionReader,
-        IDeckReader<Card> reader,
+        IDeckReader reader,
         IDeckWriter writer
     )
     {

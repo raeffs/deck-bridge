@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Raeffs.DeckBridge.DelverLens;
 
-internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
+internal class DelverLensDeckReader : IDeckReader
 {
     private static readonly ColumnDefinition CardColumn = new("card", 1);
     private static readonly ColumnDefinition FoilColumn = new("foil", 2);
@@ -22,7 +22,7 @@ internal class DelverLensDeckReader : IDeckReader<DelverLensCard>
         _delverLensDataProvider = delverLensDataProvider;
     }
 
-    public async IAsyncEnumerable<DelverLensCard> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Card> ReadDeckAsync(string filename, Deck deck, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var connection = new SQLiteConnection($"URI=file:{filename};mode=ReadOnly");
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

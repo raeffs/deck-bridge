@@ -28,9 +28,9 @@ internal class DeckConverterFactory : IDeckConverterFactory
             ?? new NullDeckCollectionReader(provider);
     }
 
-    private IDeckReader<Card> GetReader(DeckReaderProvider provider)
+    private IDeckReader GetReader(DeckReaderProvider provider)
     {
-        return _services.GetRequiredService<IEnumerable<IDeckReader<Card>>>()
+        return _services.GetRequiredService<IEnumerable<IDeckReader>>()
             .SingleOrDefault(x => x.ProviderName == provider)
             ?? new NullDeckReader(provider);
     }

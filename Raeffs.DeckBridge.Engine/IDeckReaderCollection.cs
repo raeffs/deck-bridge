@@ -1,8 +1,8 @@
-﻿using Raeffs.DeckBridge.Common;
+using Raeffs.DeckBridge.Common;
 
 namespace Raeffs.DeckBridge.Engine;
 
 public interface IDeckReaderCollection
 {
-    IDeckReader<Card> Find(DeckReaderProvider? providerName);
+    IDeckReader Find(DeckReaderProvider? providerName);
 }

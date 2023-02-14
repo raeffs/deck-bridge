@@ -15,17 +15,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAppInitializer>(services => services.GetRequiredService<ScryfallDataProvider>());
         services.AddTransient<IScryfallDataProvider>(services => services.GetRequiredService<ScryfallDataProvider>());
 
-        return services;
-    }
-
-    public static IServiceCollection AddDeckReaderWithScryfallData<TReader, TCard>(this IServiceCollection services)
-        where TReader : IDeckReader<TCard>
-        where TCard : Card
-    {
-        services.AddTransient<IDeckReader<Card>>(services => new ScryfallDataEnricher<TCard>(
-            services.GetRequiredService<TReader>(),
-            services.GetRequiredService<IScryfallDataProvider>()
-        ));
+        services.Decorate<IDeckReader, ScryfallDataEnricher>();
 
         return services;
     }

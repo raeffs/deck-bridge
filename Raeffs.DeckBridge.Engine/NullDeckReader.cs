@@ -2,7 +2,7 @@ using Raeffs.DeckBridge.Common;
 
 namespace Raeffs.DeckBridge.Engine;
 
-internal class NullDeckReader : IDeckReader<Card>
+internal class NullDeckReader : IDeckReader
 {
     public DeckReaderProvider ProviderName { get; }
 
