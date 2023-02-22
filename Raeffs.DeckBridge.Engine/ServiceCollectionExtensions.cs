@@ -31,6 +31,8 @@ public static class ServiceCollectionExtensions
             .AddTransient<IDeckWriterCollection, DeckWriterCollection>()
             .AddTransient<IDeckConverterFactory, DeckConverterFactory>();
 
+        services.Decorate<IDeckReader, DefaultValueDecorator>();
+
         return services;
     }
 
@@ -40,6 +42,8 @@ public static class ServiceCollectionExtensions
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 { "Force", options.Force.ToString() },
+                { "Combine", options.Combine.ToString() },
+                { "DefaultLanguage", options.DefaultLanguage.ToString() },
                 { "Scryfall:BulkDataFile", options.ScryfallBulkDataFile },
                 { "DelverLens:DataFile", options.DelverLensDataFile }
             })

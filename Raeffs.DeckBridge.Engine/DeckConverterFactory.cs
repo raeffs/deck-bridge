@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Raeffs.DeckBridge.Common;
 
 namespace Raeffs.DeckBridge.Engine;
@@ -15,6 +16,7 @@ internal class DeckConverterFactory : IDeckConverterFactory
     public IDeckConverter CreateConverter(DeckReaderProvider from, DeckWriterProvider to)
     {
         return new DeckConverter(
+            _services.GetRequiredService<IOptions<CommonOptions>>(),
             GetCollectionReader(from),
             GetReader(from),
             GetWriter(to)

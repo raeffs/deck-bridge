@@ -14,9 +14,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAppInitializer>(services => services.GetRequiredService<DelverLensDataProvider>());
         services.AddTransient<IDelverLensDataProvider>(services => services.GetRequiredService<DelverLensDataProvider>());
 
-        services.AddTransient<IDeckReader, DelverLensDeckReader>();
-
-        services.AddTransient<IDeckCollectionReader, DelverLensDeckCollectionReader>();
+        services.AddDeckReader<DelverLensDeckReader>();
+        services.AddDeckCollectionReader<DelverLensDeckCollectionReader>();
 
         return services;
     }

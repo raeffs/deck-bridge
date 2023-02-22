@@ -37,6 +37,8 @@ try
         .AddDeckBridgeEngine(new EngineOptions
         {
             Force = options.Force,
+            Combine = options.Combine,
+            DefaultLanguage = options.DefaultLanguage,
             ScryfallBulkDataFile = options.ScryfallBulkDataFile,
             DelverLensDataFile = options.DelverLensDataFile
         });

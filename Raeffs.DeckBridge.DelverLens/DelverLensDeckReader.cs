@@ -13,6 +13,7 @@ internal class DelverLensDeckReader : IDeckReader
     private static readonly ColumnDefinition NoteColumn = new("note", 8);
     private static readonly ColumnDefinition ConditionColumn = new("condition", 9);
     private static readonly ColumnDefinition LanguageColumn = new("language", 10);
+
     private readonly IDelverLensDataProvider _delverLensDataProvider;
 
     public DeckReaderProvider ProviderName => DeckReaderProvider.DelverLens;
