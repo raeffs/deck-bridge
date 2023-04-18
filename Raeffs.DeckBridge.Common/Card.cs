@@ -2,6 +2,8 @@ namespace Raeffs.DeckBridge.Common;
 
 public record Card
 {
+    public required string OriginalId { get; init; }
+
     public int Quantity { get; init; }
 
     public Language Language { get; init; }

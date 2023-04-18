@@ -27,7 +27,7 @@ internal record Options
     public Language DefaultLanguage { get; init; } = Language.English;
 
     [Option("delverLensDataFile", Default = "delverlens-mappings.json")]
-    public string DelverLensDataFile { get; init; } = "dlens.db";
+    public string DelverLensDataFile { get; init; } = "delverlens-mappings.json";
 
     [Option("scryfallBulkDataFile", Default = "scryfall.json")]
     public string ScryfallBulkDataFile { get; init; } = "scryfall.json";

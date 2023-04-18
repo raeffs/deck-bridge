@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Raeffs.DeckBridge.Common;
 using Raeffs.DeckBridge.Scryfall.Models;
 using System.Runtime.CompilerServices;
@@ -8,11 +9,17 @@ internal class ScryfallDataEnricher : IDeckReader
 {
     private readonly IDeckReader _underlyingReader;
     private readonly IScryfallDataProvider _dataProvider;
+    private readonly ILogger<ScryfallDataEnricher> _logger;
 
-    public ScryfallDataEnricher(IDeckReader underlyingReader, IScryfallDataProvider dataProvider)
+    public ScryfallDataEnricher(
+        IDeckReader underlyingReader,
+        IScryfallDataProvider dataProvider,
+        ILogger<ScryfallDataEnricher> logger
+    )
     {
         _underlyingReader = underlyingReader;
         _dataProvider = dataProvider;
+        _logger = logger;
     }
 
     public DeckReaderProvider ProviderName => _underlyingReader.ProviderName;
@@ -36,6 +43,10 @@ internal class ScryfallDataEnricher : IDeckReader
         else if (!string.IsNullOrWhiteSpace(card.SetCode) && !string.IsNullOrWhiteSpace(card.CollectorNumber))
         {
             additionalData = await _dataProvider.FindAsync(card.SetCode, card.CollectorNumber, cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            _logger.LogWarning("Could not find card with original id {OriginalId}", card.OriginalId);
         }
 
         return additionalData is null

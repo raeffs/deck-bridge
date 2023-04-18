@@ -46,6 +46,7 @@ internal class DelverLensDeckReader : IDeckReader
 
             yield return new()
             {
+                OriginalId = id.ToString(),
                 IsFoil = reader.GetBoolean(foilIndex),
                 Quantity = reader.GetInt32(quantityIndex),
                 Added = DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(creationIndex)).UtcDateTime,
